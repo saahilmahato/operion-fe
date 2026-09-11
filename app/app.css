@@ -1,16 +1,55 @@
 @import "tailwindcss";
 
+/* Runtime tokens used by components and the Tailwind theme below. */
+:root {
+    --ui-canvas: #f5f7fa;
+    --ui-surface: #ffffff;
+    --ui-surface-muted: #eef2f6;
+    --ui-border: #d8e0e8;
+    --ui-border-strong: #b8c4d0;
+    --ui-text: #1f2937;
+    --ui-text-muted: #667085;
+    --ui-text-subtle: #98a2b3;
+    --ui-accent: #1f6feb;
+    --ui-accent-hover: #185abc;
+    --ui-accent-soft: #e8f1ff;
+    --ui-success: #16803c;
+    --ui-warning: #b54708;
+    --ui-danger: #c43232;
+    --ui-font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --ui-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+    --ui-shadow-sm: 0 1px 2px rgb(16 24 40 / 0.06);
+    --ui-shadow-md: 0 4px 12px rgb(16 24 40 / 0.08);
+    --ui-focus-ring: 0 0 0 3px rgb(31 111 235 / 0.2);
+}
+
+/* Tailwind utilities: bg-canvas, text-text-muted, border-border, etc. */
 @theme {
-    --font-sans:
-        "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-        "Segoe UI Symbol", "Noto Color Emoji";
+    --color-canvas: var(--ui-canvas);
+    --color-surface: var(--ui-surface);
+    --color-surface-muted: var(--ui-surface-muted);
+    --color-border: var(--ui-border);
+    --color-border-strong: var(--ui-border-strong);
+    --color-text: var(--ui-text);
+    --color-text-muted: var(--ui-text-muted);
+    --color-text-subtle: var(--ui-text-subtle);
+    --color-accent: var(--ui-accent);
+    --color-accent-hover: var(--ui-accent-hover);
+    --color-accent-soft: var(--ui-accent-soft);
+    --color-success: var(--ui-success);
+    --color-warning: var(--ui-warning);
+    --color-danger: var(--ui-danger);
+    --font-sans: var(--ui-font-sans);
+    --font-mono: var(--ui-font-mono);
+    --shadow-panel: var(--ui-shadow-sm);
+    --shadow-elevated: var(--ui-shadow-md);
 }
 
 html,
 body {
-    @apply bg-white dark:bg-gray-950;
-
-    @media (prefers-color-scheme: dark) {
-        color-scheme: dark;
-    }
+    background-color: var(--ui-canvas);
+    color: var(--ui-text);
+    font-family: var(--ui-font-sans);
+    font-size: 1rem;
+    line-height: 1.5;
 }

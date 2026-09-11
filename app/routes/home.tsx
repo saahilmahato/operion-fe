@@ -1,12 +1,12 @@
-import { Welcome } from "../welcome/welcome";
+import { LoginPage } from "../features/auth/login-page";
 
 export function meta() {
     return [
-        { title: "New React Router App" },
-        { name: "description", content: "Welcome to React Router!" },
+        { title: "Sign in | Operion" },
+        { name: "description", content: "Sign in to your Operion operations workspace." },
     ];
 }
 
 export default function Home() {
-    return <Welcome />;
+    return <LoginPage />;
 }
