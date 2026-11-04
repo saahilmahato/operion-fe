@@ -3,14 +3,18 @@ import { useNavigate } from "react-router";
 import { login } from "./login-api";
 
 export function LoginPage() {
-    const [identifier, setIdentifier] = useState("");
-    const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
     async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
+
+        const formData = new FormData(event.currentTarget);
+
+        const identifier = formData.get("identifier") as string;
+        const password = formData.get("password") as string;
+
         setError("");
         setIsSubmitting(true);
 
@@ -57,11 +61,10 @@ export function LoginPage() {
 
                         <input
                             id="identifier"
+                            name="identifier"
                             type="text"
                             autoComplete="username"
                             placeholder="Enter your username or email"
-                            value={identifier}
-                            onChange={(event) => setIdentifier(event.target.value)}
                             required
                             className="h-12 w-full rounded-lg border border-border bg-surface px-4 text-sm text-text outline-none transition placeholder:text-text-subtle hover:border-border-strong focus:border-accent focus:shadow-(--ui-focus-ring)"
                         />
@@ -74,13 +77,13 @@ export function LoginPage() {
                         >
                             Password
                         </label>
+
                         <input
                             id="password"
+                            name="password"
                             type="password"
                             autoComplete="current-password"
                             placeholder="Enter your password"
-                            value={password}
-                            onChange={(event) => setPassword(event.target.value)}
                             required
                             className="h-12 w-full rounded-lg border border-border bg-surface px-4 text-sm text-text outline-none transition placeholder:text-text-subtle hover:border-border-strong focus:border-accent focus:shadow-(--ui-focus-ring)"
                         />
@@ -93,6 +96,7 @@ export function LoginPage() {
                     >
                         {isSubmitting ? "Signing in..." : "Sign in"}
                     </button>
+
                     {error && (
                         <p role="alert" className="text-sm text-danger">
                             {error}
