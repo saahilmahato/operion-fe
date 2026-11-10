@@ -1,11 +1,11 @@
+import { apiBaseUrl } from "../../config";
+
 type LoginCredentials = {
     identifier: string;
     password: string;
 };
 
 export async function login(credentials: LoginCredentials): Promise<void> {
-    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim().replace(/\/+$/, "");
-
     if (!apiBaseUrl) {
         throw new Error("Login is not configured. Set VITE_API_BASE_URL in your .env file.");
     }
