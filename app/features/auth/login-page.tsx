@@ -1,32 +1,50 @@
-import { useState } from "react";
+import { useActionState } from "react";
 import { useNavigate } from "react-router";
+import { useFormStatus } from "react-dom";
 import { login } from "./login-api";
 
+type LoginState = {
+    error: string;
+};
+
+const initialState: LoginState = {
+    error: "",
+};
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+
+    return (
+        <button
+            type="submit"
+            disabled={pending}
+            className="mt-3 h-12 w-full rounded-lg bg-accent text-sm font-semibold text-white shadow-sm transition hover:bg-accent-hover focus:outline-none focus:shadow-(--ui-focus-ring) active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
+        >
+            {pending ? "Signing in..." : "Sign in"}
+        </button>
+    );
+}
+
 export function LoginPage() {
-    const [error, setError] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
-    async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
-        event.preventDefault();
+    const [state, formAction] = useActionState<LoginState, FormData>(
+        async (_previousState, formData) => {
+            const identifier = String(formData.get("identifier") ?? "");
+            const password = String(formData.get("password") ?? "");
 
-        const formData = new FormData(event.currentTarget);
-
-        const identifier = formData.get("identifier") as string;
-        const password = formData.get("password") as string;
-
-        setError("");
-        setIsSubmitting(true);
-
-        try {
-            await login({ identifier, password });
-            navigate("/dashboard");
-        } catch (error) {
-            setError(error instanceof Error ? error.message : "Unable to sign in.");
-        } finally {
-            setIsSubmitting(false);
-        }
-    }
+            try {
+                await login({ identifier, password });
+                navigate("/dashboard");
+                return { error: "" };
+            } catch (error) {
+                return {
+                    error: error instanceof Error ? error.message : "Unable to sign in.",
+                };
+            }
+        },
+        initialState,
+    );
 
     return (
         <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#101d30] px-4 py-12">
@@ -50,7 +68,7 @@ export function LoginPage() {
                     <p className="mt-2 text-sm text-text-muted">Sign in to continue.</p>
                 </div>
 
-                <form className="space-y-5" onSubmit={handleSubmit}>
+                <form action={formAction} className="space-y-5">
                     <div>
                         <label
                             htmlFor="identifier"
@@ -89,17 +107,11 @@ export function LoginPage() {
                         />
                     </div>
 
-                    <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="mt-3 h-12 w-full rounded-lg bg-accent text-sm font-semibold text-white shadow-sm transition hover:bg-accent-hover focus:outline-none focus:shadow-(--ui-focus-ring) active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
-                    >
-                        {isSubmitting ? "Signing in..." : "Sign in"}
-                    </button>
+                    <SubmitButton />
 
-                    {error && (
+                    {state.error && (
                         <p role="alert" className="text-sm text-danger">
-                            {error}
+                            {state.error}
                         </p>
                     )}
                 </form>
